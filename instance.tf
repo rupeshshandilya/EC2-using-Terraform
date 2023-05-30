@@ -1,8 +1,8 @@
 #Creating SSH-key
 resource "aws_key_pair" "EnterKeyPairName" {
   key_name   = "EnterKeyPairName"
-  #Place Rsa public key and private key same file 
-  public_key = file("${path.module}/rsa.pub")
+  #Place Public key pair genrated by ssh-keygen
+  public_key = file("${path.module}/YourPublicKey.pub")
 }
 
 
@@ -12,7 +12,7 @@ resource "aws_security_group" "YourSecurityGroupName" {
   description = "Allow TLS inbound traffic"
 
   dynamic "ingress" {
-    for_each = [22, 80] #Enter Ports for inbound rule
+    for_each = [] #Enter Ports for inbound rule
     iterator = port
 
     content {
@@ -37,10 +37,10 @@ resource "aws_security_group" "YourSecurityGroupName" {
 # EC2 instance
 resource "aws_instance" "web" {
   ami                    = "Enter Image ID"
-  instance_type          = "t3.micro"
+  instance_type          = "Your instance Type"
   key_name               = aws_key_pair.YourKeyPairName.key_name
   vpc_security_group_ids = ["${aws_security_group.YourSecurityGroupName.id}"]
   tags = {
-    Name = "webServer"
+    Name = "Instance Name"
   }
 }
